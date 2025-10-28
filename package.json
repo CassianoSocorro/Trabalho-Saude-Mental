@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-  "dev": "tsnd src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsnd src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,11 +15,14 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "knex": "^3.1.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "mysql2": "^3.15.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
+    "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.4",
+    "@types/knex": "^0.15.2",
     "@types/node": "^24.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
