@@ -44,6 +44,18 @@ class FuncionarioData {
 
     return query as Promise<FuncionarioDB[]>;
   }
+  async create(dados: Omit<Funcionario, "id">): Promise<FuncionarioDB> {
+    const [id_inserido] = await db(this.tableName).insert(dados);
+    return this.findById(id_inserido) as Promise<FuncionarioDB>;
+  }
+
+  async update(id: number, dados: Partial<Funcionario>): Promise<number> {
+    return db(this.tableName).where({ id }).update(dados);
+  }
+
+  async remove(id: number): Promise<number> {
+    return db(this.tableName).where({ id }).del();
+  }
 }
 
 export default new FuncionarioData();

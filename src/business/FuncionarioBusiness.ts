@@ -25,5 +25,46 @@ class FuncionarioBusiness {
 
     return funcionarios as Funcionario[];
   }
+  async cadastrar(
+    dados: FuncionarioInput
+  ): Promise<Funcionario | { error: string } | undefined> {
+    const funcionarioExistente = await FuncionarioData.findByEmail(dados.email);
+    if (funcionarioExistente) {
+      return { error: "E-mail de funcionário já cadastrado." };
+    }
+
+    const dadosParaCriar: FuncionarioInput = {
+      ...dados,
+      data_admissao: dados.data_admissao ? dados.data_admissao : new Date(),
+    };
+
+    const novoFuncionario = await FuncionarioData.create(
+      dadosParaCriar as Omit<Funcionario, "id">
+    );
+
+    return novoFuncionario as Funcionario;
+  }
+
+  async atualizar(
+    id: number,
+    dados: Partial<FuncionarioInput>
+  ): Promise<Funcionario | undefined> {
+    const dadosParaAtualizar = dados;
+
+    const count = await FuncionarioData.update(
+      id,
+      dadosParaAtualizar as Partial<Funcionario>
+    );
+    if (count === 0) {
+      return undefined;
+    }
+
+    return this.obterPorId(id);
+  }
+
+  async remover(id: number): Promise<boolean> {
+    const count = await FuncionarioData.remove(id);
+    return count > 0;
+  }
 }
 export default new FuncionarioBusiness();
