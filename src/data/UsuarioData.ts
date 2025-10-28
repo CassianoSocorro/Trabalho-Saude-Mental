@@ -14,7 +14,7 @@ interface UserListFilters {
 type UsuarioDB = Omit<Usuario, "id"> & { id: number };
 
 class UsuarioData {
-  private tableName = "USUARIO";
+  private tableName = "usuarios";
 
   async findById(id: number): Promise<UsuarioDB | undefined> {
     return db(this.tableName).where({ id }).select("*").first();
@@ -27,12 +27,12 @@ class UsuarioData {
   async create(
     dados: Omit<Usuario, "id" | "data_cadastro"> & { senha: string }
   ): Promise<UsuarioDB> {
-    const [id_inserido] = await db(this.tableName).insert({
+    const [novoUsuario] = await db(this.tableName).insert({
       ...dados,
       data_cadastro: new Date(),
-    });
+    }).returning('*');
 
-    return this.findById(id_inserido) as Promise<UsuarioDB>;
+    return novoUsuario;
   }
 
   async update(

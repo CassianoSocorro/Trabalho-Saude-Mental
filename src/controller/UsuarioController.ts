@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import UsuarioBusiness from "../business/UsuarioBusiness";
+import { Usuario, UsuarioInput } from "../types/Usuario";
 
 class UsuarioController {
   async detalharUsuario(req: Request, res: Response): Promise<Response> {
