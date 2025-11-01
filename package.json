@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd src/index.ts"
+    "dev": "tsnd src/index.ts",
+    "migrate": "knex migrate:latest --knexfile knexfile.ts"
   },
   "keywords": [],
   "author": "",

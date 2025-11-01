@@ -1,8 +1,8 @@
-import knex from "knex";
 import dotenv from "dotenv";
 
 dotenv.config();
-export const connection = knex({
+
+module.exports = {
   client: "pg",
   connection: {
     host: process.env.DB_HOST,
@@ -11,4 +11,10 @@ export const connection = knex({
     database: process.env.DB_NAME,
     port: Number(process.env.DB_PORT),
   },
-});
+  migrations: {
+    directory: "./src/migrations",
+  },
+  seeds: {
+    directory: "./src/seeds",
+  },
+};
