@@ -1,6 +1,10 @@
 import { app } from "./app";
-import usuarioRouter from "./routes/UsuarioRouter";
-import funcionarioRouter from "./routes/FuncionarioRouter";
+import dotenv from "dotenv";
 
-app.use("/usuarios", usuarioRouter);
-app.use("/funcionarios", funcionarioRouter);
+dotenv.config();
+
+const PORT = process.env.PORT || 3003;
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
