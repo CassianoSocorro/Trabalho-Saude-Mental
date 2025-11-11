@@ -1,0 +1,14 @@
+import { Request, Response } from 'express';
+import { AuthBusiness } from '../business/AuthBusiness';
+export class AuthController {
+    authBusiness = new AuthBusiness();
+    public login = async (req: Request, res: Response) => {
+    try {
+         const { email, password } = req.body;
+        const result = await this.authBusiness.login({ email, password });
+        res.status(200).send(result);
+    } catch (error: any) {
+        res.status(400).send({ error: error.message });
+        }
+    };
+}
