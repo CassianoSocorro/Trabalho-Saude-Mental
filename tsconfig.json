@@ -2,13 +2,14 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "rootDir": "./src",
+    "rootDir": "./",
+    "strict": true,
     "sourceMap": true,
     "outDir": "./build",
     "removeComments": true,
     "esModuleInterop": true,
-    "noImplicitAny": true
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules"]
 }
