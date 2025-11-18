@@ -1,7 +1,8 @@
 export interface SignupInput {
-  name: string;
+  nome: string;
   email: string;
   password: string;
+  telefone?: string;
 }
 
 export interface LoginInput {
