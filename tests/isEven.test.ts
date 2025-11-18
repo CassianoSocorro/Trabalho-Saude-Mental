@@ -22,4 +22,8 @@ describe("isEven", () => {
     expect(isEven(-1)).toBe(false);
     expect(isEven(-99)).toBe(false);
   });
+
+  test("should return false for floating point numbers", () => {
+    expect(isEven(2.5)).toBe(false);
+  });
 });

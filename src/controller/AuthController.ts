@@ -8,7 +8,10 @@ export class AuthController {
       const result = await this.authBusiness.login({ email, password });
       res.status(200).send(result);
     } catch (error: any) {
-      res.status(400).send({ error: error.message });
+      if (error.message.includes("Credenciais inválidas")) {
+        return res.status(401).send({ error: error.message });
+      }
+      return res.status(400).send({ error: error.message });
     }
   };
   public signup = async (req: Request, res: Response) => {
