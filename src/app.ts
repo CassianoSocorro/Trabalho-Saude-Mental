@@ -5,6 +5,7 @@ import { avaliacaoRouter } from "./routes/AvaliacaoRouter";
 import { servicosRouter } from "./routes/ServicosRouter";
 import usuarioRouter from "./routes/UsuarioRouter";
 import funcionarioRouter from "./routes/FuncionarioRouter";
+import { authRouter } from "./routes/AuthRouter"; // Adicionado
 
 import dotenv from "dotenv";
 
@@ -19,3 +20,4 @@ app.use("/avaliacoes", avaliacaoRouter);
 app.use("/servicos", servicosRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/funcionarios", funcionarioRouter);
+app.use("/auth", authRouter); // Adicionado
