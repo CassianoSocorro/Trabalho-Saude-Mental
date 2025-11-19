@@ -1,5 +1,8 @@
 import FuncionarioData from "../data/FuncionarioData";
 import { Funcionario } from "../types/Funcionario";
+import * as bcrypt from "bcryptjs";
+
+const SALT_ROUNDS = Number(process.env.BCRYPT_ROUNDS) || 10;
 
 class FuncionarioBusiness {
   async detalhar(id: number): Promise<Funcionario | undefined> {
@@ -27,12 +30,16 @@ class FuncionarioBusiness {
       return { error: "E-mail já cadastrado." };
     }
 
-    const dataAdmissao = dados.data_admissao ? new Date(dados.data_admissao) : undefined;
+    const senhaHash = await bcrypt.hash(dados.senha, SALT_ROUNDS);
+
+    const dataAdmissao = dados.data_admissao
+      ? new Date(dados.data_admissao)
+      : undefined;
 
     const dadosParaCriar = {
       ...dados,
-      senha: dados.senha,
-      data_admissao: dataAdmissao
+      senha: senhaHash,
+      data_admissao: dataAdmissao,
     };
 
     const novoFuncionario = await FuncionarioData.create(dadosParaCriar);
@@ -43,6 +50,9 @@ class FuncionarioBusiness {
     id: number,
     dados: Partial<Funcionario>
   ): Promise<Funcionario | undefined> {
+    if (dados.senha) {
+      dados.senha = await bcrypt.hash(dados.senha, SALT_ROUNDS);
+    }
     const count = await FuncionarioData.update(id, dados);
     if (count === 0) {
       return undefined;

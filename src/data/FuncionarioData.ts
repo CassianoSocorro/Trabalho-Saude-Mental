@@ -1,5 +1,6 @@
 import { connection as db } from "../dbConnection";
 import { Funcionario } from "../types/Funcionario";
+import * as bcrypt from "bcryptjs";
 
 interface FuncionarioListFilters {
   nome?: string;
@@ -10,6 +11,8 @@ interface FuncionarioListFilters {
   limit?: number;
   offset?: number;
 }
+
+const SALT_ROUNDS = Number(process.env.BCRYPT_ROUNDS) || 10;
 
 type FuncionarioDB = Omit<Funcionario, "id"> & { id: number };
 
@@ -24,13 +27,13 @@ class FuncionarioData {
     return db(this.tableName).where({ email }).first();
   }
 
-  async create(
-    dados: Omit<Funcionario, "id">
-  ): Promise<FuncionarioDB> {
-    const [novoFuncionario] = await db(this.tableName).insert({
-      ...dados,
-      data_admissao: dados.data_admissao || new Date(),
-    }).returning('*');
+  async create(dados: Omit<Funcionario, "id">): Promise<FuncionarioDB> {
+    const [novoFuncionario] = await db(this.tableName)
+      .insert({
+        ...dados,
+        data_admissao: dados.data_admissao || new Date(),
+      })
+      .returning("*");
 
     return novoFuncionario;
   }
