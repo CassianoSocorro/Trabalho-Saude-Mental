@@ -8,7 +8,10 @@ const SALT_ROUNDS = Number(process.env.BCRYPT_ROUNDS) || 10;
 export class AuthBusiness {
   userData = UsuarioData;
 
-  async signup(input: SignupInput): Promise<AuthResponse> {
+  private async processSignup(
+    input: SignupInput,
+    role: "user" | "admin"
+  ): Promise<AuthResponse> {
     try {
       if (!input.nome || !input.email || !input.password) {
         throw new Error(
@@ -28,11 +31,13 @@ export class AuthBusiness {
         email: input.email,
         telefone: input.telefone || "",
         senha: senhaHash,
+        role: role,
       });
 
       const token = AuthUtils.generateToken({
         userId: newUser.id,
         email: newUser.email,
+        role: newUser.role,
       });
 
       return {
@@ -41,11 +46,24 @@ export class AuthBusiness {
           id: newUser.id,
           name: newUser.nome,
           email: newUser.email,
+          role: newUser.role,
         },
       };
     } catch (error: any) {
       throw new Error(error.message);
     }
+  }
+
+  public async signup(input: SignupInput): Promise<AuthResponse> {
+    return this.processSignup(input, "user");
+  }
+
+  public async signupUser(input: SignupInput): Promise<AuthResponse> {
+    return this.processSignup(input, "user");
+  }
+
+  public async signupAdmin(input: SignupInput): Promise<AuthResponse> {
+    return this.processSignup(input, "admin");
   }
 
   async login(input: LoginInput): Promise<AuthResponse> {
@@ -67,6 +85,7 @@ export class AuthBusiness {
       const token = AuthUtils.generateToken({
         userId: user.id,
         email: user.email,
+        role: user.role,
       });
 
       return {
@@ -75,6 +94,7 @@ export class AuthBusiness {
           id: user.id,
           name: user.nome,
           email: user.email,
+          role: user.role,
         },
       };
     } catch (error: any) {

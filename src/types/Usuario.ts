@@ -5,6 +5,7 @@ export interface Usuario {
   senha: string;
   data_cadastro: Date;
   telefone: string;
+  role: "user" | "admin";
 }
 
 export interface UsuarioInput {
@@ -12,4 +13,5 @@ export interface UsuarioInput {
   email: string;
   senha: string;
   telefone: string;
+  role: "user" | "admin";
 }

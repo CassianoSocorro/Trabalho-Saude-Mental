@@ -42,6 +42,7 @@ class UsuarioBusiness {
       email: dados.email,
       senha: dados.senha,
       telefone: dados.telefone,
+      role: dados.role,
     };
 
     const novoUsuario = await UsuarioData.create(dadosParaCriar);

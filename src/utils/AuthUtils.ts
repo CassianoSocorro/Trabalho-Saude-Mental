@@ -10,6 +10,7 @@ const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || "24h") as StringValue;
 export interface TokenPayload {
   userId: number;
   email: string;
+  role: "user" | "admin";
 }
 
 export class AuthUtils {

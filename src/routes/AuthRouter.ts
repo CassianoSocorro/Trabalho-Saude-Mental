@@ -7,3 +7,4 @@ const authController = new AuthController();
 
 authRouter.post("/login", authController.login);
 authRouter.post("/signup", authController.signup);
+authRouter.post("/admin/signup", authController.signupAdmin);

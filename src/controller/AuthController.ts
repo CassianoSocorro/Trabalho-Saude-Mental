@@ -32,4 +32,22 @@ export class AuthController {
         .send({ error: error.message });
     }
   };
+
+  public signupAdmin = async (req: Request, res: Response) => {
+    try {
+      const { nome, email, password, telefone } = req.body;
+
+      const result = await this.authBusiness.signupAdmin({
+        nome,
+        email,
+        password,
+        telefone,
+      });
+      res.status(201).send(result);
+    } catch (error: any) {
+      res
+        .status(error.message.includes("e-mail já cadastrado") ? 409 : 400)
+        .send({ error: error.message });
+    }
+  };
 }

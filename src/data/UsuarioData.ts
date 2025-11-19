@@ -27,7 +27,7 @@ class UsuarioData {
   async create(
     dados: Omit<Usuario, "id" | "data_cadastro"> & { senha: string }
   ): Promise<UsuarioDB> {
-    const [novoUsuario] = await db(this.tableName).insert(dados).returning('*');
+    const [novoUsuario] = await db(this.tableName).insert(dados).returning("*");
 
     return novoUsuario;
   }

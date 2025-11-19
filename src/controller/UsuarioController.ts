@@ -53,6 +53,7 @@ class UsuarioController {
         email,
         senha,
         telefone,
+        role: "user",
       });
 
       if (resultado && "error" in resultado) {
