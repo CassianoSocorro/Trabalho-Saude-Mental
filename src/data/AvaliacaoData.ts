@@ -31,7 +31,13 @@ export class AvaliacaoData {
 
   async getAll(): Promise<Avaliacao[]> {
     try {
-      const avaliacoes = await dbConnection("avaliacoes").select();
+      const avaliacoes = await dbConnection("avaliacoes").select(
+        "id",
+        "servico_id",
+        "usuario_id",
+        "nota",
+        "comentario"
+      );
       return avaliacoes as Avaliacao[];
     } catch (error: any) {
       throw new Error(error.sqlMessage || error.message);

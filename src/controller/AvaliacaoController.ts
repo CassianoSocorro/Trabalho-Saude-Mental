@@ -4,7 +4,6 @@ import { Avaliacao } from "../types/Avaliacao";
 
 export class AvaliacaoController {
   private avaliacaoBusiness: AvaliacaoBusiness;
-  authBusiness: any;
 
   constructor() {
     this.avaliacaoBusiness = new AvaliacaoBusiness();
@@ -12,7 +11,7 @@ export class AvaliacaoController {
 
   public getAvaliacoes = async (req: Request, res: Response) => {
     try {
-      const avaliacoes = await this.authBusiness.getAllAvaliacoes();
+      const avaliacoes = await this.avaliacaoBusiness.getAllAvaliacoes();
 
       res.status(200).send(avaliacoes);
     } catch (error: any) {
