@@ -11,8 +11,8 @@ export class ServicosController {
 
     createServico = async (req: Request, res: Response): Promise<void> => {
         try {
-            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria } = req.body;
-            const servico: Servicos = { nome, tipo, cidade, endereco, telefone, gratuito, categoria };
+            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude } = req.body;
+            const servico: Servicos = { nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude };
             const newServico = await this.servicosBusiness.createServico(servico);
             res.status(201).send(newServico);
         } catch (error: any) {

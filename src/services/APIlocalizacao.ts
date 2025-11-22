@@ -19,7 +19,7 @@ export class GeoService {
                 },
             });
 
-            const resultados = response.data.resultados;
+            const resultados = response.data.results;
 
             if (!resultados || resultados.length === 0) {
                 throw new Error("Endereço inválido ou não encontrado pelo serviço de Geocoding.");
