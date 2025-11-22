@@ -53,4 +53,39 @@ describe("Usuario Business <-> Data Integration", () => {
     expect(result).toBeUndefined();
     expect(mockData.findById).toHaveBeenCalledTimes(1);
   });
+
+  test("cadastrar → cria um novo usuário quando email não existe", async () => {
+    const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
+
+    mockData.findByEmail.mockResolvedValue(undefined);
+    mockData.create.mockResolvedValue(MOCK_USUARIO);
+
+    const result = await UsuarioBusiness.cadastrar({
+      nome: "Test User",
+      email: "test@example.com",
+      senha: "123",
+      telefone: "999",
+      role: "user",
+    });
+
+    expect(mockData.findByEmail).toHaveBeenCalledWith("test@example.com");
+    expect(result).toEqual(MOCK_USUARIO);
+  });
+
+  test("cadastrar → deve retornar erro quando email já existe", async () => {
+    const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
+
+    mockData.findByEmail.mockResolvedValue(MOCK_USUARIO);
+
+    const result = await UsuarioBusiness.cadastrar({
+      nome: "Test User",
+      email: "test@example.com",
+      senha: "123",
+      telefone: "999",
+      role: "user",
+    });
+
+    expect(result).toEqual({ error: "E-mail já cadastrado." });
+  });
+
 });
