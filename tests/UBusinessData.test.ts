@@ -54,38 +54,59 @@ describe("Usuario Business <-> Data Integration", () => {
     expect(mockData.findById).toHaveBeenCalledTimes(1);
   });
 
-  test("cadastrar → cria um novo usuário quando email não existe", async () => {
+  test("deve criar um novo usuário quando email não existe", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
 
     mockData.findByEmail.mockResolvedValue(undefined);
     mockData.create.mockResolvedValue(MOCK_USUARIO);
 
     const result = await UsuarioBusiness.cadastrar({
-      nome: "Test User",
-      email: "test@example.com",
-      senha: "123",
-      telefone: "999",
-      role: "user",
+    nome: "Beta User",
+    email: "betatester@gmail.com",
+    senha: "123456789",
+    telefone: "(55)5555-5555",
+    role: "user",
     });
 
-    expect(mockData.findByEmail).toHaveBeenCalledWith("test@example.com");
+    expect(mockData.findByEmail).toHaveBeenCalledWith("betatester@gmail.com");
     expect(result).toEqual(MOCK_USUARIO);
   });
 
-  test("cadastrar → deve retornar erro quando email já existe", async () => {
+  test("deve retornar erro quando email já existe", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
 
     mockData.findByEmail.mockResolvedValue(MOCK_USUARIO);
 
     const result = await UsuarioBusiness.cadastrar({
-      nome: "Test User",
-      email: "test@example.com",
-      senha: "123",
-      telefone: "999",
-      role: "user",
+    nome: "Beta User",
+    email: "betatester@gmail.com",
+    senha: "123456789",
+    telefone: "(55)5555-5555",
+    role: "user",
     });
 
     expect(result).toEqual({ error: "E-mail já cadastrado." });
+  });
+
+  test("deve chamar update e retornar usuário atualizado", async () => {
+    const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
+
+    mockData.update.mockResolvedValue(1);
+    mockData.findById.mockResolvedValue(MOCK_USUARIO);
+
+    const result = await UsuarioBusiness.atualizar(MOCK_ID, { nome: "Novo Nome" });
+
+    expect(mockData.update).toHaveBeenCalled();
+    expect(result).toEqual(MOCK_USUARIO);
+  });
+
+  test("deve retornar true quando remoção ocorre", async () => {
+    const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
+    mockData.remove.mockResolvedValue(1);
+
+    const result = await UsuarioBusiness.remover(MOCK_ID);
+
+    expect(result).toBe(true);
   });
 
 });
