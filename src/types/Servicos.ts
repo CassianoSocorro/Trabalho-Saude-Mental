@@ -7,6 +7,6 @@ export interface Servicos {
     telefone: string;
     gratuito: boolean;
     categoria: string;
-    latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
 }
