@@ -4,19 +4,16 @@ import { connection } from "../../src/dbConnection";
 import * as bcrypt from "bcryptjs";
 
 const TEST_EMAIL = "auth.test@example.com";
-const TEST_PASSWORD = "password123";
+const TEST_PASSWORD = "password1234";
 const TEST_TELEFONE = "(00) 0000-0000";
 const TEST_NOME = "User Teste Auth";
 const TEST_ROLE = "user"
 
 describe("Auth E2E Tests", () => {
-  beforeAll(async () => {
-    await connection.raw("SELECT 1");
+  beforeEach(async () => {
+    await connection.raw("SELECT 1"); 
 
-await connection.raw('TRUNCATE TABLE avaliacoes RESTART IDENTITY CASCADE');
-await connection.raw('TRUNCATE TABLE servicos RESTART IDENTITY CASCADE');
-await connection.raw('TRUNCATE TABLE funcionarios RESTART IDENTITY CASCADE');
-await connection.raw('TRUNCATE TABLE usuarios RESTART IDENTITY CASCADE');
+    await connection("usuarios").where({ email: TEST_EMAIL }).del();
 
     const passwordHash = await bcrypt.hash(TEST_PASSWORD, 10);
 
