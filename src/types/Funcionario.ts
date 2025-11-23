@@ -7,5 +7,5 @@ export interface Funcionario {
     telefone?: string;
     data_admissao?: Date;
     salario?: number;
-    senha?: string;
+    senha: string;
 }

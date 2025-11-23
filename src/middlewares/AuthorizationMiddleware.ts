@@ -22,4 +22,18 @@ export class AuthorizationMiddleware {
       return res.status(500).send({ error: error.message });
     }
   }
+  static authorizeAdminOnly(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userRole = req.user?.role;
+
+      if (userRole !== 'admin') {
+        return res.status(403).send({ 
+          error: 'Acesso negado. Apenas administradores podem realizar esta ação.' 
+        });
+      }
+      next();
+    } catch (error: any) {
+      return res.status(500).send({ error: error.message });
+    }
+  }
 }

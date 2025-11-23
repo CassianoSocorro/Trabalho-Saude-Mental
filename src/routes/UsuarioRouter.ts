@@ -5,8 +5,9 @@ import { AuthMiddleware } from "../middlewares/AuthMiddleware";
 
 const userRouter = Router();
 
-userRouter.get("/", UsuarioController.listarUsuarios);
-userRouter.get("/:id", UsuarioController.detalharUsuario);
+userRouter.get("/", AuthMiddleware.authenticate, AuthorizationMiddleware.authorizeAdminOnly, UsuarioController.listarUsuarios);
+userRouter.get("/:id",  AuthMiddleware.authenticate,
+  AuthorizationMiddleware.authorizeOwner, UsuarioController.detalharUsuario);
 userRouter.post("/", UsuarioController.cadastrarUsuario);
 
 userRouter.put(
