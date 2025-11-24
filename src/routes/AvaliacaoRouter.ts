@@ -7,7 +7,6 @@ const avaliacaoRouter = Router();
 const avaliacaoController = new AvaliacaoController();
 
 avaliacaoRouter.get("/", avaliacaoController.getAvaliacoes);
-
 avaliacaoRouter.post("/", AuthMiddleware.authenticate, avaliacaoController.createAvaliacao);
 avaliacaoRouter.get("/:servico_id",avaliacaoController.getAvaliacoesByServicoId);
 avaliacaoRouter.put("/:id", AuthMiddleware.authenticate,AuthorizationMiddleware.authorizeReviewOwner, avaliacaoController.updateAvaliacao);

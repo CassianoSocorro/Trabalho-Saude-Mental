@@ -20,7 +20,7 @@ class FuncionarioData {
   private tableName = "funcionarios";
 
   async findById(id: number): Promise<FuncionarioDB | undefined> {
-    return db(this.tableName).where({ id }).select("*").first();
+    return db(this.tableName).where({ id }).select("id",'nome', 'cargo', 'email', 'telefone', 'data_admissao', 'servico_id').first();
   }
 
   async findByEmail(email: string): Promise<FuncionarioDB | undefined> {
@@ -50,7 +50,7 @@ class FuncionarioData {
   }
 
   async findAll(filters?: FuncionarioListFilters): Promise<FuncionarioDB[]> {
-    let query = db(this.tableName).select("*");
+    let query = db(this.tableName).select("id",'nome', 'cargo', 'email', 'telefone', 'data_admissao', 'servico_id');
 
     if (filters?.nome) {
       query = query.where("nome", "like", `%${filters.nome}%`);

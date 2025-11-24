@@ -44,8 +44,13 @@ class UsuarioData {
   }
 
   async findAllWithFilters(filters: UserListFilters): Promise<UsuarioDB[]> {
-    let query = db(this.tableName).select("*");
-
+    let query = db(this.tableName).select('id', 
+    'nome', 
+    'email', 
+    'data_cadastro', 
+    'telefone', 
+    'role');
+    
     if (filters.nome) {
       query = query.where("nome", "like", `%${filters.nome}%`);
     }
