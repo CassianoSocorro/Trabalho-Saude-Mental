@@ -102,4 +102,39 @@ describe("Testes E2E de Serviços", () => {
     expect(getResponse.body).toHaveProperty("id", servicoId);
     expect(getResponse.body).toHaveProperty("nome", novoServico.nome);
   });
+
+  test("deve atualizar um serviço existente com sucesso (rota PUT /servicos/:id)", async () => {
+    const servicoParaCriar = {
+      nome: "Hospital Geral",
+      tipo: "Hospital",
+      cidade: "Rio de Janeiro",
+      endereco: "Av. Atlântica, 1000",
+      telefone: "21912345678",
+      gratuito: false,
+      categoria: "Saúde",
+    };
+
+    const createResponse = await request(app)
+      .post("/servicos")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(servicoParaCriar)
+      .expect(201);
+
+    const servicoId = createResponse.body.id;
+
+    const dadosParaAtualizar = {
+      nome: "Hospital Central Atualizado",
+      telefone: "21987654321",
+    };
+
+    const updateResponse = await request(app)
+      .put(`/servicos/${servicoId}`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(dadosParaAtualizar)
+      .expect(200);
+
+    expect(updateResponse.body).toHaveProperty("id", servicoId);
+    expect(updateResponse.body).toHaveProperty("nome", dadosParaAtualizar.nome);
+    expect(updateResponse.body).toHaveProperty("telefone", dadosParaAtualizar.telefone);
+  });
 });
