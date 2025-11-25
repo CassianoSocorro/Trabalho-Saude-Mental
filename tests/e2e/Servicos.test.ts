@@ -137,4 +137,35 @@ describe("Testes E2E de Serviços", () => {
     expect(updateResponse.body).toHaveProperty("nome", dadosParaAtualizar.nome);
     expect(updateResponse.body).toHaveProperty("telefone", dadosParaAtualizar.telefone);
   });
+
+  test("deve deletar um serviço existente com sucesso (rota DELETE /servicos/:id)", async () => {
+    const servicoParaCriar = {
+      nome: "Clínica de Fisioterapia",
+      tipo: "Clínica",
+      cidade: "Belo Horizonte",
+      endereco: "Rua das Flores, 500",
+      telefone: "31912345678",
+      gratuito: false,
+      categoria: "Fisioterapia",
+    };
+
+    const createResponse = await request(app)
+      .post("/servicos")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(servicoParaCriar)
+      .expect(201);
+
+    const servicoId = createResponse.body.id;
+
+    await request(app)
+      .delete(`/servicos/${servicoId}`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .expect(204);
+
+    const getResponse = await request(app)
+      .get(`/servicos/${servicoId}`)
+      .expect(404);
+
+    expect(getResponse.body).toHaveProperty("message", "Serviço não encontrado.");
+  });
 });
