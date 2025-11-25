@@ -65,4 +65,14 @@ describe("Testes E2E de Serviços", () => {
     expect(response.body).toHaveProperty("latitude");
     expect(response.body).toHaveProperty("longitude");
   });
+
+  test("deve listar serviços com sucesso (rota GET /servicos)", async () => {
+    const response = await request(app)
+      .get("/servicos")
+      .expect(200);
+
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body[0]).toHaveProperty("nome", "UPA Centro");
+  });
 });
