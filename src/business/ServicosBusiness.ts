@@ -11,9 +11,9 @@ export class ServicosBusiness {
     private servicosData: ServicosData;
     private geoService: GeoService;
 
-    constructor() {
-        this.servicosData = new ServicosData();
-        this.geoService = new GeoService()
+    constructor(servicosData: ServicosData, geoService: GeoService) {
+        this.servicosData = servicosData;
+        this.geoService = geoService;
     }
 
     async createServico(servicoDto: CreateServicoDto): Promise<Servicos> {

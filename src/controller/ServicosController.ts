@@ -2,12 +2,14 @@ import { Request, Response } from 'express';
 import { ServicosBusiness } from '../business/ServicosBusiness';
 import { CreateServicoDto, UpdateServicoDto } from '../dto/ServicosDto';
 import { ValidationError, GoogleMapsAPIError } from '../utils/CustomErrors';
+import { ServicosData } from '../data/ServicosData';
+import { GeoService } from '../services/APIlocalizacao';
 
 export class ServicosController {
     private servicosBusiness: ServicosBusiness;
 
-    constructor() {
-        this.servicosBusiness = new ServicosBusiness();
+    constructor(servicosData: ServicosData, geoService: GeoService) {
+        this.servicosBusiness = new ServicosBusiness(servicosData, geoService);
     }
 
     createServico = async (req: Request, res: Response): Promise<void> => {
