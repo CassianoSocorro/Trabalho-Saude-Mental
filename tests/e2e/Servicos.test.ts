@@ -75,4 +75,31 @@ describe("Testes E2E de Serviços", () => {
     expect(response.body.length).toBeGreaterThan(0);
     expect(response.body[0]).toHaveProperty("nome", "UPA Centro");
   });
+
+  test("deve buscar um serviço por ID com sucesso (rota GET /servicos/:id)", async () => {
+    const novoServico = {
+      nome: "CAPS Leste",
+      tipo: "Atenção Psicossocial",
+      cidade: "São Paulo",
+      endereco: "Rua da Paz, 456",
+      telefone: "11998877665",
+      gratuito: true,
+      categoria: "Saúde Mental",
+    };
+
+    const createResponse = await request(app)
+      .post("/servicos")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(novoServico)
+      .expect(201);
+
+    const servicoId = createResponse.body.id;
+
+    const getResponse = await request(app)
+      .get(`/servicos/${servicoId}`)
+      .expect(200);
+
+    expect(getResponse.body).toHaveProperty("id", servicoId);
+    expect(getResponse.body).toHaveProperty("nome", novoServico.nome);
+  });
 });
