@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import { GoogleMapsAPIError, ValidationError } from '../utils/CustomErrors';
 
 export interface coordenadas {
     latitude: number;
@@ -22,7 +23,7 @@ export class GeoService {
             const resultados = response.data.results;
 
             if (!resultados || resultados.length === 0) {
-                throw new Error("Endereço inválido ou não encontrado pelo serviço de Geocoding.");
+                throw new ValidationError("Endereço inválido ou não encontrado pelo serviço de Geocoding.");
             }
 
             const locatizacao = resultados[0].geometry.location;
@@ -33,8 +34,7 @@ export class GeoService {
             };
             
         } catch (error: any) {
-            console.error("Erro na comunicação com o Google Geocoding API:", error.message);
-            throw new Error(`Falha ao obter coordenadas: ${error.message}`);
+            throw new GoogleMapsAPIError(`Falha ao obter coordenadas: ${error.message}`);
         }
     }
 }

@@ -1,6 +1,7 @@
 import { Servicos } from '../types/Servicos';
 import { ServicosData } from '../data/ServicosData';
 import { GeoService } from '../services/APIlocalizacao';
+import { ValidationError, GoogleMapsAPIError } from '../utils/CustomErrors';
 
 
 const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
@@ -16,10 +17,10 @@ export class ServicosBusiness {
 
     async createServico(servico: Servicos): Promise<Servicos> {
         if (!servico.nome || !servico.tipo || !servico.cidade || !servico.endereco || !servico.telefone || servico.gratuito === undefined || !servico.categoria) {
-            throw new Error('Todos os campos obrigatórios devem ser preenchidos.');
+            throw new ValidationError('Todos os campos obrigatórios devem ser preenchidos.');
         }
         if (!GOOGLE_API_KEY) {
-            throw new Error("A chave GOOGLE_MAPS_API_KEY não está configurada.");
+            throw new GoogleMapsAPIError("A chave GOOGLE_MAPS_API_KEY não está configurada.");
         }
         try {
             const fullAddress = servico.endereco + ", " + servico.cidade; 
@@ -37,6 +38,9 @@ export class ServicosBusiness {
 
             return this.servicosData.create(dadosParaSalvar);
         } catch (error: any) {
+            if (error instanceof ValidationError || error instanceof GoogleMapsAPIError) {
+                throw error;
+            }
             throw new Error(`Erro ao processar o endereço: ${error.message}`);
         }
     }
@@ -47,21 +51,21 @@ export class ServicosBusiness {
 
     async getServicoById(id: number): Promise<Servicos | undefined> {
         if (!id) {
-            throw new Error('ID do serviço é obrigatório.');
+            throw new ValidationError('ID do serviço é obrigatório.');
         }
         return this.servicosData.getById(id);
     }
 
     async updateServico(id: number, servico: Partial<Servicos>): Promise<Servicos | undefined> {
         if (!id) {
-            throw new Error('ID do serviço é obrigatório.');
+            throw new ValidationError('ID do serviço é obrigatório.');
         }
         return this.servicosData.update(id, servico);
     }
 
     async deleteServico(id: number): Promise<boolean> {
         if (!id) {
-            throw new Error('ID do serviço é obrigatório.');
+            throw new ValidationError('ID do serviço é obrigatório.');
         }
         return this.servicosData.delete(id);
     }
