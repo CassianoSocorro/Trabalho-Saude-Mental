@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ServicosBusiness } from '../business/ServicosBusiness';
-import { Servicos } from '../types/Servicos';
+import { CreateServicoDto, UpdateServicoDto } from '../dto/ServicosDto';
+import { ValidationError, GoogleMapsAPIError } from '../utils/CustomErrors';
 
 export class ServicosController {
     private servicosBusiness: ServicosBusiness;
@@ -11,12 +12,18 @@ export class ServicosController {
 
     createServico = async (req: Request, res: Response): Promise<void> => {
         try {
-            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude } = req.body;
-            const servico: Servicos = { nome, tipo, cidade, endereco, telefone, gratuito, categoria, latitude, longitude };
-            const newServico = await this.servicosBusiness.createServico(servico);
+            const { nome, tipo, cidade, endereco, telefone, gratuito, categoria } = req.body;
+            const servicoDto = new CreateServicoDto(nome, tipo, cidade, endereco, telefone, gratuito, categoria);
+            const newServico = await this.servicosBusiness.createServico(servicoDto);
             res.status(201).send(newServico);
         } catch (error: any) {
-            res.status(400).send({ message: error.message });
+            if (error instanceof ValidationError) {
+                res.status(400).send({ message: error.message });
+            } else if (error instanceof GoogleMapsAPIError) {
+                res.status(500).send({ message: error.message });
+            } else {
+                res.status(500).send({ message: 'Erro interno do servidor.' });
+            }
         }
     }
 
@@ -30,7 +37,7 @@ export class ServicosController {
             );
             res.status(200).send(servicos);
         } catch (error: any) {
-            res.status(400).send({ message: error.message });
+            res.status(500).send({ message: 'Erro interno do servidor.' });
         }
     }
 
@@ -44,7 +51,11 @@ export class ServicosController {
                 res.status(404).send({ message: 'Serviço não encontrado.' });
             }
         } catch (error: any) {
-            res.status(400).send({ message: error.message });
+            if (error instanceof ValidationError) {
+                res.status(400).send({ message: error.message });
+            } else {
+                res.status(500).send({ message: 'Erro interno do servidor.' });
+            }
         }
     }
 
@@ -52,15 +63,19 @@ export class ServicosController {
         try {
             const id = Number(req.params.id);
             const { nome, tipo, cidade, endereco, telefone, gratuito, categoria } = req.body;
-            const servico: Partial<Servicos> = { nome, tipo, cidade, endereco, telefone, gratuito, categoria };
-            const updatedServico = await this.servicosBusiness.updateServico(id, servico);
+            const servicoDto = new UpdateServicoDto(nome, tipo, cidade, endereco, telefone, gratuito, categoria);
+            const updatedServico = await this.servicosBusiness.updateServico(id, servicoDto);
             if (updatedServico) {
                 res.status(200).send(updatedServico);
             } else {
                 res.status(404).send({ message: 'Serviço não encontrado.' });
             }
         } catch (error: any) {
-            res.status(400).send({ message: error.message });
+            if (error instanceof ValidationError) {
+                res.status(400).send({ message: error.message });
+            } else {
+                res.status(500).send({ message: 'Erro interno do servidor.' });
+            }
         }
     }
 
@@ -74,7 +89,11 @@ export class ServicosController {
                 res.status(404).send({ message: 'Serviço não encontrado.' });
             }
         } catch (error: any) {
-            res.status(400).send({ message: error.message });
+            if (error instanceof ValidationError) {
+                res.status(400).send({ message: error.message });
+            } else {
+                res.status(500).send({ message: 'Erro interno do servidor.' });
+            }
         }
     }
 }

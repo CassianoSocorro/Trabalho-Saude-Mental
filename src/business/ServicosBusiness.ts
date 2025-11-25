@@ -2,6 +2,7 @@ import { Servicos } from '../types/Servicos';
 import { ServicosData } from '../data/ServicosData';
 import { GeoService } from '../services/APIlocalizacao';
 import { ValidationError, GoogleMapsAPIError } from '../utils/CustomErrors';
+import { CreateServicoDto, UpdateServicoDto } from '../dto/ServicosDto';
 
 
 const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
@@ -15,15 +16,12 @@ export class ServicosBusiness {
         this.geoService = new GeoService()
     }
 
-    async createServico(servico: Servicos): Promise<Servicos> {
-        if (!servico.nome || !servico.tipo || !servico.cidade || !servico.endereco || !servico.telefone || servico.gratuito === undefined || !servico.categoria) {
-            throw new ValidationError('Todos os campos obrigatórios devem ser preenchidos.');
-        }
+    async createServico(servicoDto: CreateServicoDto): Promise<Servicos> {
         if (!GOOGLE_API_KEY) {
             throw new GoogleMapsAPIError("A chave GOOGLE_MAPS_API_KEY não está configurada.");
         }
         try {
-            const fullAddress = servico.endereco + ", " + servico.cidade; 
+            const fullAddress = servicoDto.endereco + ", " + servicoDto.cidade; 
             
             const { latitude, longitude } = await this.geoService.getCoordenadas(
                 fullAddress,
@@ -31,7 +29,7 @@ export class ServicosBusiness {
             );
 
             const dadosParaSalvar = {
-                ...servico, 
+                ...servicoDto, 
                 latitude: latitude, 
                 longitude: longitude, 
             } as Servicos; 
@@ -56,11 +54,11 @@ export class ServicosBusiness {
         return this.servicosData.getById(id);
     }
 
-    async updateServico(id: number, servico: Partial<Servicos>): Promise<Servicos | undefined> {
+    async updateServico(id: number, servicoDto: UpdateServicoDto): Promise<Servicos | undefined> {
         if (!id) {
             throw new ValidationError('ID do serviço é obrigatório.');
         }
-        return this.servicosData.update(id, servico);
+        return this.servicosData.update(id, servicoDto as Partial<Servicos>);
     }
 
     async deleteServico(id: number): Promise<boolean> {
