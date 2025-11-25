@@ -15,12 +15,12 @@ jest.mock("../src/data/UsuarioData", () => ({
   },
 }));
 
-describe("Usuario Business <-> Data Integration", () => {
+describe("Integração Usuário Business <-> Data", () => {
   const MOCK_ID = 5;
 
   const MOCK_USUARIO: Usuario = {
     id: 5,
-    nome: "Beta User",
+    nome: "Usuário Beta",
     email: "betatester@gmail.com",
     senha: "123456789",
     telefone: "(55)5555-5555",
@@ -32,7 +32,7 @@ describe("Usuario Business <-> Data Integration", () => {
     jest.clearAllMocks();
   });
 
-  test("Deve chamar FindById na camada Data quando detalhar um usuário", async () => {
+  test("Deve chamar FindById na camada Data ao detalhar um usuário", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
 
     mockData.findById.mockResolvedValue(MOCK_USUARIO);
@@ -43,7 +43,7 @@ describe("Usuario Business <-> Data Integration", () => {
     expect(result).toEqual(MOCK_USUARIO);
   });
 
-  test("Deve retornar undefined quando não encontrado", async () => {
+  test("Deve retornar undefined quando o usuário não for encontrado", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
 
     mockData.findById.mockResolvedValue(undefined);
@@ -54,14 +54,14 @@ describe("Usuario Business <-> Data Integration", () => {
     expect(mockData.findById).toHaveBeenCalledTimes(1);
   });
 
-  test("deve criar um novo usuário quando email não existe", async () => {
+  test("Deve criar um novo usuário quando o e-mail não existe", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
 
     mockData.findByEmail.mockResolvedValue(undefined);
     mockData.create.mockResolvedValue(MOCK_USUARIO);
 
     const result = await UsuarioBusiness.cadastrar({
-    nome: "Beta User",
+    nome: "Usuário Beta",
     email: "betatester@gmail.com",
     senha: "123456789",
     telefone: "(55)5555-5555",
@@ -72,13 +72,13 @@ describe("Usuario Business <-> Data Integration", () => {
     expect(result).toEqual(MOCK_USUARIO);
   });
 
-  test("deve retornar erro quando email já existe", async () => {
+  test("Deve retornar erro quando o e-mail já existe", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
 
     mockData.findByEmail.mockResolvedValue(MOCK_USUARIO);
 
     const result = await UsuarioBusiness.cadastrar({
-    nome: "Beta User",
+    nome: "Usuário Beta",
     email: "betatester@gmail.com",
     senha: "123456789",
     telefone: "(55)5555-5555",
@@ -88,7 +88,7 @@ describe("Usuario Business <-> Data Integration", () => {
     expect(result).toEqual({ error: "E-mail já cadastrado." });
   });
 
-  test("deve chamar update e retornar usuário atualizado", async () => {
+  test("Deve chamar update e retornar o usuário atualizado", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
 
     mockData.update.mockResolvedValue(1);
@@ -100,7 +100,7 @@ describe("Usuario Business <-> Data Integration", () => {
     expect(result).toEqual(MOCK_USUARIO);
   });
 
-  test("deve retornar true quando remoção ocorre", async () => {
+  test("Deve retornar verdadeiro quando a remoção ocorre", async () => {
     const mockData = UsuarioData as jest.Mocked<typeof UsuarioData>;
     mockData.remove.mockResolvedValue(1);
 

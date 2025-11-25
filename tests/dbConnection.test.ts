@@ -1,7 +1,7 @@
 import { connection } from "../src/dbConnection";
 
-describe("async & error handling", () => {
-  test("should connect to the database", async () => {
+describe("Conexão com o banco de dados e tratamento de erros", () => {
+  test("deve conectar ao banco de dados", async () => {
     const result = await connection.raw("SELECT 1+1 AS result"); 
 
  expect(result.rows[0].result).toBe(2);  });
@@ -10,5 +10,3 @@ describe("async & error handling", () => {
     await connection.destroy();
   });
 });
-
-

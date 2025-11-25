@@ -9,7 +9,7 @@ const TEST_TELEFONE = "(00) 0000-0000";
 const TEST_NOME = "User Teste Auth";
 const TEST_ROLE = "user"
 
-describe("Auth E2E Tests", () => {
+describe("Testes E2E de Autenticação", () => {
   beforeEach(async () => {
     await connection.raw("SELECT 1"); 
 
@@ -30,7 +30,7 @@ describe("Auth E2E Tests", () => {
     await connection.destroy();
   });
 
-  test("should successfully log in a user with valid credentials", async () => {
+  test("deve logar um usuário com credenciais válidas com sucesso", async () => {
     const validCredentials = {
       email: TEST_EMAIL,
       password: TEST_PASSWORD,
@@ -45,7 +45,7 @@ describe("Auth E2E Tests", () => {
     expect(typeof response.body.token).toBe("string");
   });
 
-  test("should return 401 for invalid credentials", async () => {
+  test("deve retornar 401 para credenciais inválidas", async () => {
     const invalidCredentials = {
       email: "invalid@example.com",
       password: "wrongpassword",
