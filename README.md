@@ -2,6 +2,10 @@
 
 Este documento fornece um relatório detalhado sobre o projeto de API de Saúde Mental, descrevendo sua finalidade, arquitetura, funcionalidades e, em particular, o papel da API de localização.
 
+Para acessar os endpoints de nosso projeto, basta seguir o link da documentação do Postman, logo abaixo:
+
+https://documenter.getpostman.com/view/50180668/2sB3dPTWCu
+
 ## 1. Visão Geral do Projeto
 
 O projeto é uma API RESTful desenvolvida em TypeScript, utilizando o framework Express, projetada para gerenciar serviços relacionados à saúde mental. A API permite a criação, leitura, atualização e exclusão (CRUD) de informações sobre serviços, funcionários, usuários e avaliações. Sua arquitetura é organizada em camadas para promover a modularidade, manutenibilidade e escalabilidade.

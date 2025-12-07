@@ -17,7 +17,7 @@ describe("Serviços E2E CRUD (Limpeza Focada e Segura)", () => {
         await connection.raw("SELECT 1");
 
         await connection("usuarios").where({ email: TEST_EMAIL_CRUD }).del();
-        await connection("servicos").del();
+        
         const passwordHash = await bcrypt.hash(TEST_PASSWORD, 10);
 
         await connection("usuarios").insert({
